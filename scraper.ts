@@ -116,7 +116,6 @@ async function RunAsync(): Promise<void> {
     const powerplayPlayers: string[] = await tenbet
       .locator(pptenbetWrapper)
       .allTextContents();
-    console.log('powerplayPlayers', powerplayPlayers);
 
     tenbetMatches[i] = {
       ...tenbetMatches[i],
