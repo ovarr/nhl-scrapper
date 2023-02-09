@@ -103,7 +103,11 @@ export default defineComponent({
                 <td class="bold bg small">Over:</td>
                 <td
                   :class="{
-                    value: checkOverUnder(p.betc.over, p.tenbet.over, 'over'),
+                    valueBet: checkOverUnder(
+                      p.betc.over,
+                      p.tenbet.over,
+                      'over'
+                    ),
                   }"
                 >
                   {{ p.betc.over }}
@@ -114,7 +118,7 @@ export default defineComponent({
                 <td class="bold bg small">Under:</td>
                 <td
                   :class="{
-                    value: checkOverUnder(
+                    valueBet: checkOverUnder(
                       p.betc.under,
                       p.tenbet.under,
                       'under'
@@ -168,11 +172,6 @@ table {
 
   td {
     padding: 0 0.25rem;
-
-    &.value {
-      color: red;
-      font-weight: bold;
-    }
   }
 }
 
@@ -186,5 +185,12 @@ table {
 
 .small {
   font-size: 0.8rem;
+}
+
+.valueBet {
+  color: red;
+  font-weight: bold;
+  background-color: rgba(red, 0.1);
+  border: 1px solid red;
 }
 </style>
