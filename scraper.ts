@@ -33,7 +33,7 @@ async function RunAsync(): Promise<void> {
 
   const parsedBetc: Match[] = parseMatches(betcElements);
 
-  for (let i = 0; i < parsedBetc.length - 1; i++) {
+  for (let i = 0; i < parsedBetc.length; i++) {
     await betc.click('text=' + parsedBetc[i].home);
 
     await betc.waitForTimeout(1000);
@@ -104,7 +104,7 @@ async function RunAsync(): Promise<void> {
 
   const tenbetMatches: Match[] = parseMatches(tenbetElements);
 
-  for (let i = 0; i < tenbetMatches.length - 1; i++) {
+  for (let i = 0; i < tenbetMatches.length; i++) {
     await tenbet.click('text=' + tenbetMatches[i].home);
 
     await tenbet.waitForTimeout(1000);
@@ -116,6 +116,7 @@ async function RunAsync(): Promise<void> {
     const powerplayPlayers: string[] = await tenbet
       .locator(pptenbetWrapper)
       .allTextContents();
+    console.log('powerplayPlayers', powerplayPlayers);
 
     tenbetMatches[i] = {
       ...tenbetMatches[i],
@@ -220,13 +221,15 @@ function parseBetconstValues(array: string[]) {
 }
 
 function parseTenbetValues(array: string[]) {
+  // const regex =
+  //   /^((?:[\w\s.-])*\w+) Power Play PointsUnder \(.*\)(\d+\.\d+)Over \(.*\)(\d+\.\d+)$/;
   const regex =
-    /^((?:[\w\s.-])*\w+) Power Play PointsUnder \(.*\)(\d+\.\d+)Over \(.*\)(\d+\.\d+)$/;
+    /^((?:[\w\s.-])*\w+)\s*Power Play Points(?:Under \(.*\)(\d+\.\d+)|Over \(.*\)(\d+\.\d+))(?:Under \(.*\)(\d+\.\d+)|Over \(.*\)(\d+\.\d+))$/;
 
   const result: PP[] = [];
 
   for (const str of array) {
-    const match = str.match(regex);
+    const match = str.match(regex).filter((value) => value !== undefined);
     if (match) {
       result.push({
         player: match[1].trim(),

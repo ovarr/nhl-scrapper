@@ -26,7 +26,12 @@ export default defineComponent({
 
         const combined = betc.map((betcPlayer) => {
           const tenbetPlayer = tenbet.find((tenbetPlayer) => {
-            return tenbetPlayer.player.includes(betcPlayer.player);
+            // split the player name and check if some of the words are included in the other player name
+            // if so, return the object
+            return tenbetPlayer.player
+              .split(' ')
+              .some((player) => betcPlayer.player.includes(player));
+            // return tenbetPlayer.player.includes(betcPlayer.player);
           });
 
           return {
@@ -54,19 +59,21 @@ export default defineComponent({
     // check the value of the over and under individually for each value and if the betc value is higher than the tenbet value by 1.0 or more
     // return true, otherwise return false
     checkOverUnder(betc: number, tenbet: number, attr: string) {
-      switch (attr) {
-        case 'over':
-          if (betc - tenbet >= 0.5) {
-            return true;
-          }
-          return false;
-        case 'under':
-          if (betc - tenbet >= 0.1) {
-            return true;
-          }
-          return false;
-        default:
-          return false;
+      if (betc && tenbet) {
+        switch (attr) {
+          case 'over':
+            if (betc - tenbet >= 0.5) {
+              return true;
+            }
+            return false;
+          case 'under':
+            if (betc - tenbet >= 0.2) {
+              return true;
+            }
+            return false;
+          default:
+            return false;
+        }
       }
     },
   },
