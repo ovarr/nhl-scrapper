@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue';
 import nhl from '../../results/nhl.json';
 import { CombinedMatch, PP } from './../../types';
+import matchStrings from './matchStrings';
 
 export default defineComponent({
   data() {
@@ -21,17 +22,19 @@ export default defineComponent({
 
     combinePlayers(matches: CombinedMatch[]) {
       const combinedPlayers = matches.map((match) => {
-        const betc: PP[] = match.pp.betc;
-        const tenbet: PP[] = match.pp.tenbet;
+        const betc: PP[] = [...match.pp.betc];
+        const tenbet: PP[] = [...match.pp.tenbet];
 
         const combined = betc.map((betcPlayer) => {
           const tenbetPlayer = tenbet.find((tenbetPlayer) => {
-            // split the player name and check if some of the words are included in the other player name
-            // if so, return the object
-            return tenbetPlayer.player
-              .split(' ')
-              .some((player) => betcPlayer.player.includes(player));
-            // return tenbetPlayer.player.includes(betcPlayer.player);
+            // split the player name and check if some of the words are included in the other player name giving higher preference to the second item in the array
+            // const playerMatching = matchStrings(
+            //   betcPlayer.player,
+            //   tenbetPlayer.player
+            // );
+            // console.log('matching', playerMatching);
+            const splitPlayer = tenbetPlayer.player.split(' ').reverse();
+            return betcPlayer.player.includes(splitPlayer[0]);
           });
 
           return {
@@ -112,7 +115,9 @@ export default defineComponent({
                 >
                   {{ p.betc.over }}
                 </td>
-                <td>{{ p.tenbet.over }}</td>
+                <td :class="{ noValue: p.tenbet.over === 0 }">
+                  {{ p.tenbet.over }}
+                </td>
               </tr>
               <tr>
                 <td class="bold bg small">Under:</td>
@@ -127,7 +132,9 @@ export default defineComponent({
                 >
                   {{ p.betc.under }}
                 </td>
-                <td>{{ p.tenbet.under }}</td>
+                <td :class="{ noValue: p.tenbet.under === 0 }">
+                  {{ p.tenbet.under }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -192,5 +199,10 @@ table {
   font-weight: bold;
   background-color: rgba(red, 0.1);
   border: 1px solid red;
+}
+
+.noValue {
+  background-color: #333;
+  color: white;
 }
 </style>

@@ -30,7 +30,6 @@ async function RunAsync(): Promise<void> {
     });
     return data;
   });
-
   const parsedBetc: Match[] = parseMatches(betcElements);
 
   for (let i = 0; i < parsedBetc.length; i++) {
@@ -220,13 +219,10 @@ function parseBetconstValues(array: string[]) {
 }
 
 function parseTenbetValues(array: string[]) {
-  // const regex =
-  //   /^((?:[\w\s.-])*\w+) Power Play PointsUnder \(.*\)(\d+\.\d+)Over \(.*\)(\d+\.\d+)$/;
   const regex =
-    /^((?:[\w\s.-])*\w+)\s*Power Play Points(?:Under \(.*\)(\d+\.\d+)|Over \(.*\)(\d+\.\d+))(?:Under \(.*\)(\d+\.\d+)|Over \(.*\)(\d+\.\d+))$/;
+    /^([\w\s.'-]+?)\s*(?:\([\w.-]+\)\s*)?Power Play Points(?:Under \(.*\)(\d+\.\d+)|Over \(.*\)(\d+\.\d+))(?:Under \(.*\)(\d+\.\d+)|Over \(.*\)(\d+\.\d+))$/;
 
   const result: PP[] = [];
-
   for (const str of array) {
     const match = str.match(regex).filter((value) => value !== undefined);
     if (match) {
